@@ -60,10 +60,10 @@ function expressCode() {
                 fs.writeFileSync(`routes/${lowecaseName}.routes.js`, content.newRoute.content(lowecaseName), { encoding: "utf-8", flag: "w" });
 
                 //import new route into main route
-                appendPos('routes/routes.js', 59, newRoute.require(lowecaseName));
+                appendPos('routes/routes.js', 59, content.newRoute.require(lowecaseName));
 
                 //use new route in the main route
-                appendEndPos('routes/routes.js', 23, newRoute.use(lowecaseName));
+                appendEndPos('routes/routes.js', 23, content.newRoute.use(lowecaseName));
             } catch (err) {
                 console.log(err);
             }
