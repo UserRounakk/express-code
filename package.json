@@ -1,0 +1,28 @@
+{
+  "name": "express-code",
+  "version": "1.0.0",
+  "description": "create mvc pattern easily with just  a single command",
+  "main": "app.js",
+  "scripts": {
+    "requirements": "npm install express mongoose multer i bcrypt jsonwebtoken",
+    "new": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UserRounakk/express-code.git"
+  },
+  "keywords": [
+    "express",
+    "express-code",
+    "userrounakk"
+  ],
+  "author": "Rounak Agrawal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UserRounakk/express-code/issues"
+  },
+  "homepage": "https://github.com/UserRounakk/express-code#readme",
+  "dependencies": {
+    "i": "^0.3.7"
+  }
+}
