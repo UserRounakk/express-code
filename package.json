@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "requirements": "npm install express mongoose multer i bcrypt jsonwebtoken",
-    "new": "node app.js"
+    "new": "node app.js",
+    "setup": "node authgen.js"
   },
   "repository": {
     "type": "git",
