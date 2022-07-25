@@ -2,8 +2,8 @@ const inflect = require('i')();
 const content = {
     config:
         `const CONFIG = {
-    DB_URL: 'db_name',
-    DB_NAME: 'db_url',
+    DB_URL: 'mongodb://127.0.0.1:27017',
+    DB_NAME: 'db_name',
     JWT_SECRET: "jwt_secret"
 };
 module.exports = CONFIG;`,
@@ -468,7 +468,20 @@ router.post('/login', auth_controller.login)
 
 router.post('/register', auth_controller.setPath, uploader.single('image'), auth_controller.register)
 
-module.exports = router;`
+module.exports = router;`,
+    mongooseService: `const mongoose = require("mongoose");
+const CONFIG = require("../../config/config");
+
+mongoose.connect(CONFIG.DB_URL+"/"+CONFIG.DB_NAME,{
+    autoIndex: true,
+    autoCreate: true
+}, (err) => {
+    if(err) {
+        console.log("Error: ", err);
+    } else {
+        console.log("Mongodb connected successfully.");
+    }
+});`
 
 }
 

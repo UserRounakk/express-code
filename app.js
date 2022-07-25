@@ -118,6 +118,13 @@ function expressCode() {
                 console.log(err);
             }
         }
+        if (!fs.existsSync(`../app/services/mongoose.service.js`)) {
+            try {
+                fs.writeFileSync(`../app/services/mongoose.service.js`, content.mongooseService, { encoding: "utf-8", flag: "w" });
+            } catch (err) {
+                console.log(err);
+            }
+        }
     } else {
         console.log(`Inavlid Syntax: "Name must be defined"`);
     }
