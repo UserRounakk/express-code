@@ -199,11 +199,11 @@ const UserSchemaDef = new mongoose.Schema({
         type: String,
         required: [true, 'Password is required'],
     },
-    role: [{
+    role: {
         type: String,
-        enum: ["admin", 'seller', 'customer'],
+        enum: ["admin", "user"],
         default: "customer"
-    }],
+    },
     status: {
         type: String,
         enum: ["active", 'inactive'],
