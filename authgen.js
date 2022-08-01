@@ -103,6 +103,14 @@ function authgen() {
                 console.log(err);
             }
         }
+        if (!fs.existsSync(`../app/controllers/user.controller.js`)) {
+            try {
+                fs.writeFileSync(`../app/controllers/user.controller.js`, content.usersController, { encoding: "utf-8", flag: "w" });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
 
         //creating middlewares
         if (!fs.existsSync('../app/middlewares')) {
@@ -139,6 +147,13 @@ function authgen() {
         if (!fs.existsSync(`../app/services/mongoose.service.js`)) {
             try {
                 fs.writeFileSync(`../app/services/mongoose.service.js`, content.mongooseService, { encoding: "utf-8", flag: "w" });
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        if (!fs.existsSync(`../app/services/user.service.js`)) {
+            try {
+                fs.writeFileSync(`../app/services/user.service.js`, content.userService, { encoding: "utf-8", flag: "w" });
             } catch (err) {
                 console.log(err);
             }

@@ -12,7 +12,7 @@ module.exports = CONFIG;`,
         `const express = require('express');
 const app = express();
 
-require('./app/services/mongoose.services');
+require('./app/services/mongoose.service');
 
 const routes = require('./routes/routes');
 
@@ -24,7 +24,7 @@ app.use('/', routes);
 
 app.use((req, res, next) => {
     next({
-        status: 404,
+        status_code: 404,
         msg: "Page Not found"
     });
 });
@@ -161,7 +161,7 @@ class ${name}Service {
         //validation properties here
 
         if(Object.keys(msg).length > 0){
-            throw {status: 400, msg: msg}
+            throw {status_code: 400, msg: msg}
         } else {
             return null;
         }
@@ -184,13 +184,12 @@ const UserSchemaDef = new mongoose.Schema({
         type: String,
         required: [true, "Name is required"],
     },
-    email:  {
+    email: {
         type: String,
         required: [true, "Email is required"],
         validate: {
-            validator: function(em){
-                // text@text.text
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(em)
+            validator: function (em) {
+                return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(em)
             },
             message: props => "Invalid email."
         },
@@ -202,14 +201,14 @@ const UserSchemaDef = new mongoose.Schema({
     },
     role: [{
         type: String,
-        enum: ["admin", 'seller','customer'],
+        enum: ["admin", 'seller', 'customer'],
         default: "customer"
-    }] ,
+    }],
     status: {
         type: String,
         enum: ["active", 'inactive'],
         default: "active"
-    } ,
+    },
     image: {
         type: String,
         default: null
@@ -217,8 +216,8 @@ const UserSchemaDef = new mongoose.Schema({
     phone: {
         type: String,
         validate: {
-            validator: function(v) {
-                return /\d{3}-\d{3}-\d{4}/.test(v);
+            validator: function (v) {
+                return /d{3}-d{3}-d{4}/.test(v);
             },
             message: props => "Invalid phone number!"
         },
@@ -233,7 +232,6 @@ const UserSchemaDef = new mongoose.Schema({
     autoCreate: true
 });
 
-// User => users
 const UserModel = mongoose.model('User', UserSchemaDef);
 module.exports = UserModel;`,
 
@@ -258,7 +256,7 @@ class AuthController {
 
             if (validate) {
                 next({
-                    status: 400,
+                    status_code: 400,
                     msg: validate
                 });
             } else {
@@ -278,7 +276,7 @@ class AuthController {
             }
         } catch (err) {
             next({
-                status: 500,
+                status_code: 500,
                 msg: err
             });
         }
@@ -304,14 +302,14 @@ class AuthController {
                     })
                 }).catch((err) => {
                     next({
-                        status: 400,
+                        status_code: 400,
                         msg: err
                     })
                 })
 
         } catch (error) {
             next({
-                status: 422,
+                status_code: 422,
                 msg: error
             })
         }
@@ -341,7 +339,7 @@ const loginCheck = async (req, res, next) => {
 
     if (!token) {
         next({
-            status: 401,
+            status_code: 401,
             msg: "Unauthenticated"
         })
     } else {
@@ -358,19 +356,19 @@ const loginCheck = async (req, res, next) => {
                     next();
                 } else {
                     next({
-                        status: 401,
+                        status_code: 401,
                         msg: "Token expired or user does not exists."
                     })
                 }
             } else {
                 next({
-                    status: 401,
+                    status_code: 401,
                     msg: "Unauthorized: Token mismatched"
                 })
             }
         } catch (err) {
             next({
-                status: 400,
+                status_code: 400,
                 msg: err
             })
         }
@@ -439,10 +437,10 @@ class AuthService {
                 if (bcrypt.compareSync(data.password, user.password)) {
                     return user;
                 } else {
-                    throw { status: 400, msg: "Credentials does not match" }
+                    throw { status_code: 400, msg: "Credentials does not match" }
                 }
             } else {
-                throw { status: 400, msg: "User does not exists." }
+                throw { status_code: 400, msg: "User does not exists." }
             }
         } catch (err) {
             throw err;
@@ -462,7 +460,7 @@ module.exports = AuthService;
     authRoute: `const router = require('express').Router();
 const AuthController = require("../app/controllers/auth.controller")
 const auth_controller = new AuthController();
-const uploader = require('../app/middleware/uploader.middleware');
+const uploader = require('../app/middlewares/uploader.middleware');
 
 router.post('/login', auth_controller.login)
 
@@ -481,7 +479,33 @@ mongoose.connect(CONFIG.DB_URL+"/"+CONFIG.DB_NAME,{
     } else {
         console.log("Mongodb connected successfully.");
     }
-});`
+});`,
+
+    userService: `const UserModel = require('../models/user.model');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const CONFIG = require("../../config/config");
+
+class UserService {
+    //service code here
+}
+
+module.exports = UserService;`,
+
+    usersController: `const UserService = require("../services/user.service");
+const bcrypt = require("bcrypt");
+
+class UsersController {
+
+    constructor() {
+        this.user_service = new UserService();
+    }
+
+    //controller actions here
+
+}
+
+module.exports = UsersController;`
 
 }
 
